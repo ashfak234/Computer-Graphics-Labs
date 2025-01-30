@@ -55,22 +55,43 @@ int main( void )
 	// Ensure we can capture keyboard inputs
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
     
-    //Define vertices
-    const float vertices[] = {
-        // x     y      z
-          -0.5f, -0.5f, 0.0f,
-           0.5f, -0.5f, 0.0f,
-           0.0f,  0.5f, 0.0f
+    ////Define vertices
+    //const float vertices[] = {
+    //    // x     y      z
+    //      -0.5f, -0.5f, 0.0f,
+    //       0.5f, -0.5f, 0.0f,
+    //       0.0f,  0.5f, 0.0f
 
+    //};
+
+    //// Define vertex colours
+    //const float colours[] = {
+    //    // R     G      B
+    //       1.0f,  0.0f, 0.0f,
+    //       0.0f,  1.0f, 0.0f,
+    //       0.0f,  0.0f, 1.0f
+
+    //};
+
+
+    // Define vertices
+    static const float vertices[] = {
+        -0.9f, -0.5f, 0.0f,   // triangle 1
+        -0.1f, -0.5f, 0.0f,
+        -0.5f,  0.5f, 0.0f,
+         0.1f, -0.5f, 0.0f,   // triangle 2
+         0.9f, -0.5f, 0.0f,
+         0.5f,  0.5f, 0.0f
     };
 
     // Define vertex colours
-    const float colours[] = {
-        // R     G      B
-           1.0f,  0.0f, 0.0f,
-           0.0f,  1.0f, 0.0f,
-           0.0f,  0.0f, 1.0f
-
+    static const float colours[] = {
+        1.0f, 0.0f, 0.0f,    // triangle 1 (red)
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,    // triangle 2 (blue)
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
     };
 
     // Create the Vertex Array Object (VAO)
@@ -89,11 +110,6 @@ int main( void )
     glGenBuffers(1, &colourBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, colourBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(colours), colours, GL_STATIC_DRAW);
-
-    // Send the colour buffer to the shaders
-    glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, colourBuffer);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 
     // Compile shader program
@@ -121,8 +137,15 @@ int main( void )
                               0,        // stride
                               (void*)0);// offset
 
+        // Send the colour buffer to the shaders
+        glEnableVertexAttribArray(1);
+        glBindBuffer(GL_ARRAY_BUFFER, colourBuffer);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
         // Draw the triangle
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        //glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (3 * sizeof(float)));
         glDisableVertexAttribArray(0);
 
 
