@@ -127,7 +127,7 @@ int main( void )
 
 
 		// Swap buffers
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(window); 
 		glfwPollEvents();
 	}
     
