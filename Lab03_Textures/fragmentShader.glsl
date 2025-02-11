@@ -12,4 +12,4 @@ uniform sampler2D textureMap;
 void main()
 {
     colour = vec3(texture(textureMap, UV));
-}
+} 
