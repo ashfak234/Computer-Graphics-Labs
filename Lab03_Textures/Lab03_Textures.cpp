@@ -120,34 +120,6 @@ int main(void)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    unsigned int texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    //Load texture image from file
-   /* const char* path = "../assets/crate.jpg";*/
-    const char* path = "../assets/mario.png";
-
-    int width, height, nChannels;
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char* data = stbi_load(path, &width, &height, &nChannels, 0);
-    if (data)
-        std::cout << "Texture Loaded." << std::endl;
-    else
-        std::cout << "Texture not loaded. Check the path." << std::endl;
-
-    // Specify 2D texture
- /*   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);*/
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    // Free the image from the memory
-    stbi_image_free(data);
-
-    // Bind the texture to the VAO
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glBindVertexArray(VAO);
-
     // Create texture buffer
     unsigned int uvBuffer;
     glGenBuffers(1, &uvBuffer);
@@ -163,6 +135,55 @@ int main(void)
 
     // Use the shader program
     glUseProgram(shaderID);
+
+    //   //create bind texture
+//   unsigned int texture;
+//   glGenTextures(1, &texture);
+//   glBindTexture(GL_TEXTURE_2D, texture);
+
+//   //Load texture image from file
+//   const char* path = "../assets/mario_small.png";
+
+//   int width, height, nChannels;
+//   stbi_set_flip_vertically_on_load(true);
+//   unsigned char* data = stbi_load(path, &width, &height, &nChannels, 0);
+//   if (data)
+//       std::cout << "Texture Loaded." << std::endl;
+//   else
+//       std::cout << "Texture not loaded. Check the path." << std::endl;
+
+//   // Specify 2D texture
+///*   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);*/
+//   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+//   glGenerateMipmap(GL_TEXTURE_2D);
+
+//   // Set texture wrapping options
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+//   //Nearest neighbour interpolation
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+//   // Free the image from the memory
+//   stbi_image_free(data);
+// 
+
+
+    // Load the textures
+    unsigned int texture1 = loadTexture("../assets/crate.jpg");
+    unsigned int texture2 = loadTexture("../assets/mario.png");
+
+    // Send the texture uniforms to the fragment shader
+    glUseProgram(shaderID);
+    glUniform1i(glGetUniformLocation(shaderID, "texture1"), 0);
+    glUniform1i(glGetUniformLocation(shaderID, "texture2"), 1);
+
+    // Bind the textures
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture2);
 
     // Render loop
     while (!glfwWindowShouldClose(window))
@@ -184,9 +205,14 @@ int main(void)
         glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
+
+        //// Bind the texture to the VAO
+        //glBindTexture(GL_TEXTURE_2D, texture);
+        //glBindVertexArray(VAO);
         //// Draw the triangle
         //glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / sizeof(float));
         //glDisableVertexAttribArray(0);
+
 
         // Draw the triangles
         glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(unsigned int), GL_UNSIGNED_INT, 0);
