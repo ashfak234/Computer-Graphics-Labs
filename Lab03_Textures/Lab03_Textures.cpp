@@ -56,26 +56,51 @@ int main(void)
     // Ensure we can capture keyboard inputs
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
-    // Define vertices
-    const float vertices[] = {
-        // x     y     z
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.5f,  0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-         0.5f,  0.5f, 0.0f,
-        -0.5f,  0.5f, 0.0f
+    //// Define vertices
+    //const float vertices[] = {
+    //    // x     y     z
+    //    -0.5f, -0.5f, 0.0f,
+    //     0.5f, -0.5f, 0.0f,
+    //     0.5f,  0.5f, 0.0f,
+    //    -0.5f, -0.5f, 0.0f,
+    //     0.5f,  0.5f, 0.0f,
+    //    -0.5f,  0.5f, 0.0f
+    //};
+
+    //// Define texture coordinates
+    //const float uv[] = {
+    //    // u   v
+    //      0.0f,  0.0f,    // triangle 1
+    //      1.0f,  0.0f,
+    //      1.0f,  1.0f,
+    //      0.0f,  0.0f,    // triangle 2
+    //      1.0f,  1.0f,
+    //      0.0f,  1.0f
+    //};
+
+
+    // Define vertex positions
+    static const float vertices[] = {
+        // x     y     z      index
+        -0.5f, -0.5f, 0.0f,  // 0       3 -- 2
+         0.5f, -0.5f, 0.0f,  // 1       |  / |  
+         0.5f,  0.5f, 0.0f,  // 2       | /  |
+        -0.5f,  0.5f, 0.0f   // 3       0 -- 1
     };
 
     // Define texture coordinates
-    const float uv[] = {
-        // u   v
-          0.0f,  0.0f,    // triangle 1
-          1.0f,  0.0f,
-          1.0f,  1.0f,
-          0.0f,  0.0f,    // triangle 2
-          1.0f,  1.0f,
-          0.0f,  1.0f
+    static const float uv[] = {
+        // u    v      index
+        0.0f,  0.0f,  // 0
+        1.0f,  0.0f,  // 1
+        1.0f,  1.0f,  // 2
+        0.0f,  1.0f,  // 3
+    };
+
+    // Define indices
+    static const unsigned int indices[] = {
+        0, 1, 2,  // lower-right triangle
+        0, 2, 3   // upper-left triangle
     };
 
     // Create the Vertex Array Object (VAO)
@@ -89,6 +114,11 @@ int main(void)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+    // Create Element Buffer Object (EBO)
+    unsigned int EBO;
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     unsigned int texture;
     glGenTextures(1, &texture);
@@ -151,9 +181,15 @@ int main(void)
         glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-        // Draw the triangle
-        glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / sizeof(float));
+        //// Draw the triangle
+        //glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / sizeof(float));
+        //glDisableVertexAttribArray(0);
+
+        // Draw the triangles
+        glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(unsigned int), GL_UNSIGNED_INT, 0);
+
         glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
 
         // Swap buffers
         glfwSwapBuffers(window);
