@@ -125,7 +125,9 @@ int main(void)
     glBindTexture(GL_TEXTURE_2D, texture);
 
     //Load texture image from file
-    const char* path = "../assets/crate.jpg";
+   /* const char* path = "../assets/crate.jpg";*/
+    const char* path = "../assets/mario.png";
+
     int width, height, nChannels;
     stbi_set_flip_vertically_on_load(true);
     unsigned char* data = stbi_load(path, &width, &height, &nChannels, 0);
@@ -135,7 +137,8 @@ int main(void)
         std::cout << "Texture not loaded. Check the path." << std::endl;
 
     // Specify 2D texture
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+ /*   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);*/
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     // Free the image from the memory
