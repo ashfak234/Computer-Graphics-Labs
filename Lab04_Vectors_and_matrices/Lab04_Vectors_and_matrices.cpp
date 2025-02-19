@@ -84,7 +84,7 @@ int main() {
     std::cout << "B * A = " << glm::transpose(A * B) << "\n" << std::endl;
 
     // The identity matrix
-    printf("\nThe identity matrix:\n");
+    printf("\nThe identity matrix:\n"); 
     glm::mat4 I;
     std::cout << "I = " << glm::transpose(I) << "\n" << std::endl;
 
