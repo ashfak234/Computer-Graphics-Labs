@@ -18,7 +18,7 @@ int main( void )
     {
         fprintf( stderr, "Failed to initialize GLFW\n" );
         getchar();
-        return -1;
+        return -1; 
     }
 
     glfwWindowHint(GLFW_SAMPLES, 4);
