@@ -124,14 +124,7 @@ int main( void )
     // Use wireframe rendering (comment out to turn off)
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
-    // Define teapot object lighting properties
-    teapot.ka = 0.2f;
-    teapot.kd = 0.7f;
-    teapot.ks = 1.0f;
-    teapot.Ns = 20.0f;
-    float constant = 1.0f;
-    float linear = 0.1f;
-    float quadratic = 0.02f;
+
 
     // Define light source properties
     glm::vec3 lightPosition = glm::vec3(2.0f, 2.0f, 2.0f);
